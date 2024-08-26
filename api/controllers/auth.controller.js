@@ -54,7 +54,7 @@ export const signin = async (req, res, next) => {
       id: validUser._id
     }, process.env.JWT_SECRET);
 
-    const{password: pass, ...rest} = validUser._doc;
+    const{password: pass, _id: _id, ...rest} = validUser._doc;
 
     res.status(200).cookie('access-token', token, {
       httpOnly: true
