@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PrivateRoute from './components/PrivateRoute';
 
 
 export default function App() {
@@ -23,7 +24,9 @@ export default function App() {
         <Route path="/sign-in" element={<SignIn />}/>
         <Route path="/sign-up" element={<SignUp />}/>
         <Route path="/projects" element={<Projects />}/>
-        <Route path="/dashboard" element={<Dashboard />}/>
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />}/>
+        </Route>
       </Routes>
       <ToastContainer
         position="bottom-right"
