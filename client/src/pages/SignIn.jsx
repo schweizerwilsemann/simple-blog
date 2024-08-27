@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
+import { ToastContainer, toast } from 'react-toastify';
+
 import OAuth from '../components/OAuth';
 
 export default function SignIn() {
@@ -18,7 +20,8 @@ export default function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if(!formData.email || !formData.password){
-      return disPatch(signInFailure('Please fill out all fields! '));
+      // return disPatch(signInFailure('Please fill out all fields! '));
+      return toast.error(('Please fill all out fields!'));
     }
     try {
       disPatch(signInStart());

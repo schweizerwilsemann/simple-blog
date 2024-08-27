@@ -1,12 +1,14 @@
-import { Navbar, TextInput, Button } from 'flowbite-react'
+import { Navbar, TextInput, Button, Dropdown, Avatar } from 'flowbite-react'
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import {AiOutlineSearch} from 'react-icons/ai'
 import {FaMoon} from 'react-icons/fa'
+import {useSelector} from "react-redux"
 
 
 export default function Header() {
     const path = useLocation().pathname;
+    const {currentUser} = useSelector(state => state.user); 
   return (
     <Navbar className='border-b-2'>
         <Link to="/" className='self-center whitespace-nowrap text-sm 
@@ -29,11 +31,32 @@ export default function Header() {
             <Button className='w-12 h-10 hidden sm:inline' color='grey' pill>
                 <FaMoon />
             </Button>
-            <Link to='/sign-in' >
-                <Button gradientDuoTone='tealToLime'>
-                    Sign In
-                </Button>
-            </Link>
+            {currentUser ? (
+                <Dropdown arrowIcon='false' inline label={<Avatar alt='user' img={currentUser.profilePicture} rounded/>}>
+                    <Dropdown.Header>
+                        <span className=' block text-sm'>
+                            <span className='font-bold'>Username: </span> 
+                            {currentUser.username}
+                        </span>
+                        <span className=' block text-sm truncate'>
+                            <span className='font-bold' >Email: </span> 
+                            {currentUser.email}
+                        </span>
+                    </Dropdown.Header>
+                    <Link to={'/dashboard?tab=profile'}>
+                        <Dropdown.Item>Profile</Dropdown.Item>
+                    </Link>
+                    <Dropdown.Divider/>
+                    <Dropdown.Item>Sign Out</Dropdown.Item>
+                </Dropdown>
+            ): 
+                <Link to='/sign-in' >
+                    <Button gradientDuoTone='tealToLime'>
+                        Sign In
+                    </Button>
+                </Link>
+            }
+
             <Navbar.Toggle />
         </div>  
         <Navbar.Collapse>

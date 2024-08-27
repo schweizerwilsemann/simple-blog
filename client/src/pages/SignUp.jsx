@@ -2,6 +2,8 @@ import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import OAuth from '../components/OAuth';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 
 export default function SignUp() {
@@ -16,7 +18,8 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if(!formData.username || !formData.email || !formData.password){
-      return setErrorMessage('Please fill out all fields! ');
+      return toast.error('Please fill all out fields!');
+      // return setErrorMessage('Please fill out all fields! ');
     }
     try {
       setLoading(true);
@@ -28,7 +31,7 @@ export default function SignUp() {
       });
       const data = await res.json();
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        return toast.error((data.message));
       }
       setLoading(false);
       if(res.ok) {
@@ -54,9 +57,9 @@ export default function SignUp() {
             This is a demo project. You can sign up with email
             and password, or with Google
           </p>
-        </div>
-        <div className="flex-1">
-          {/* right side */}
+      </div>
+      {/* right side */}
+        <div className="flex-1">         
           <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
             <div className="">
               <Label value='Your Username'/>
@@ -104,16 +107,18 @@ export default function SignUp() {
             <span>Have an account?</span>
             <Link to='/sign-in' className='text-blue-400'>Sign In</Link>
           </div>
-          {
-            errorMessage && (
-              <Alert className='mt-5' color='failure'>
-                {errorMessage}
-              </Alert>
-            )
-          }
-        </div>
+          <div className="flex-col">
+            {
+              errorMessage && (
+                <Alert className='mt-5' color='failure'>
+                  {errorMessage}
+                </Alert>
+              )
+            }
+          </div>
+        
+        </div>        
       </div>
-      
     </div>
     
     </>
