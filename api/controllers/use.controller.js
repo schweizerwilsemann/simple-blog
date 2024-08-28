@@ -38,7 +38,7 @@ export const updateUser = async (req, res, next) => {
                     password: req.body.password
                 },
             }, {new: true});
-            const {password,_id:_id, ...rest} = updatedUser._doc;
+            const {password, ...rest} = updatedUser._doc;
             res.status(200).json(rest); 
         } catch (error) {
             next(error);
