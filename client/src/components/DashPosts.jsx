@@ -1,12 +1,14 @@
 import React, { useEffect, useState }  from 'react'
 import { useSelector } from 'react-redux'
-import {Table, TableHead} from 'flowbite-react'
+import {Table} from 'flowbite-react'
 import {Link} from 'react-router-dom'
+
 
 
 export default function DashPosts() {
   const {currentUser} = useSelector(state => state.user);
   const [userPosts, setUserPosts] = useState([]);
+  const [showMore, setShowMore] = useState(true);
 
   console.log(">>> check user posts: ", userPosts);
   useEffect(() => {
@@ -16,6 +18,9 @@ export default function DashPosts() {
         const data = await res.json();
         if(res.ok){
           setUserPosts(data.posts);
+          if(data.posts.length < 9){
+            setShowMore(false);
+          }
         }
       } catch (error) {
         console.log(">>> check error: ", error);
@@ -25,7 +30,21 @@ export default function DashPosts() {
       fetchPosts()
     }
   }, [currentUser._id]);
-  
+  const handleShowMore = async() =>{
+    const startIndex = userPosts.length;
+    try {
+      const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex = ${startIndex}`);
+      const data = await res.json();
+      if(res.ok){
+        setUserPosts((prev) => [...prev, ...data.posts]);
+        if(data.posts.length < 0) {
+          setShowMore(false);
+        }
+      }
+    } catch (error) {
+      console.log(">>> error: ", error.message);
+    }
+  }
   
   return (
     <div className='table-auto 
@@ -39,24 +58,12 @@ export default function DashPosts() {
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
-              <Table.HeadCell>
-                Date Updated
-              </Table.HeadCell>
-              <Table.HeadCell>
-                Post Image
-              </Table.HeadCell>
-              <Table.HeadCell>
-                Post Title
-              </Table.HeadCell>
-              <Table.HeadCell>
-                Category
-              </Table.HeadCell>
-              <Table.HeadCell>
-                Delete
-              </Table.HeadCell>
-              <Table.HeadCell>
-                <span>Edit</span>
-              </Table.HeadCell>
+              <Table.HeadCell>Date Updated</Table.HeadCell>
+              <Table.HeadCell>Post Image</Table.HeadCell>
+              <Table.HeadCell> Post Title</Table.HeadCell>
+              <Table.HeadCell>Category</Table.HeadCell>
+              <Table.HeadCell>Delete</Table.HeadCell>
+              <Table.HeadCell><span>Edit</span></Table.HeadCell>
             </Table.Head>
             {userPosts.map((post) => (
               <Table.Body className='divide-y'>
@@ -79,11 +86,17 @@ export default function DashPosts() {
                       <span>Edit</span>
                     </Link>
                   </Table.Cell>
-
                 </Table.Row>
               </Table.Body>
             ))}
           </Table>
+          {
+            showMore && (
+              <button onClick={handleShowMore} className='w-full text-teal-500 self-center text-sm py-7'>
+                Show More
+              </button>
+            )
+          }
         </>
       ) : (
         <p>You have no post yet</p>
