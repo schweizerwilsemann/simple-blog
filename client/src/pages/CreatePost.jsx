@@ -90,7 +90,7 @@ export default function CreatePost() {
                 <TextInput type='text' placeholder='Title' required id='title' className='flex-1'
                     onChange={(event) => setFormdata({...formData, title: event.target.value})}
                 />
-                <Select onChange={(event) => setFormdata({...formData, title: event.target.value})}>
+                <Select onChange={(event) => setFormdata({...formData, category: event.target.value})}>
                     <option value='uncategorized'>Select a category</option>
                     <option value='javascript'>JavaScript</option>
                     <option value='reactjs'>React.js</option>
