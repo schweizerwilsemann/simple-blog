@@ -30,22 +30,26 @@ export const updateUser = async (req, res, next) => {
         if(!req.body.username.match(/^[A-Za-z0-9_.]+$/)){
             return next(errorHandler(400, 'Username can only contain letters and numbers'));
         }
-        try {
-            const updatedUser = await User.findByIdAndUpdate(req.params.userId, {
-                $set: {
-                    username: req.body.username,
-                    email: req.body.email,
-                    profilePicture: req.body.profilePicture,
-                    password: req.body.password
-                },
-            }, {new: true});
-            const {password, ...rest} = updatedUser._doc;
-            res.status(200).json(rest); 
-        } catch (error) {
-            next(error);
+        if ((await User.find({ username: req.body.username })).length > 0){
+            return next(errorHandler(400, 'Username already exists'));
         }
     }
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.params.userId, {
+            $set: {
+                username: req.body.username,
+                email: req.body.email,
+                profilePicture: req.body.profilePicture,
+                password: req.body.password
+            },
+        }, {new: true});
+        const {password, ...rest} = updatedUser._doc;
+        res.status(200).json(rest); 
+    } catch (error) {
+        next(error);
+    }
 }
+
 
 export const deleteUser = async (req, res, next) => {
     if(req.user.id !== req.params.userId){

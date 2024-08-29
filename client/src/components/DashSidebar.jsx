@@ -1,14 +1,18 @@
-import { Sidebar } from 'flowbite-react'
+import { Sidebar, Modal, Button } from 'flowbite-react';
+import 'react-circular-progressbar/dist/styles.css';
+import {HiOutlineExclamationCircle} from 'react-icons/hi'
 import React from 'react'
 import {HiUser, HiArrowSmRight} from 'react-icons/hi'
 import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { signOutSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
+   
 
 export default function DashSidebar() {
     const location = useLocation();
     const [tab, setTab] = useState('');
+    const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch();
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
@@ -18,6 +22,7 @@ export default function DashSidebar() {
         }
     }, [location.search]);
     const handleSignout = async () => {
+        setShowModal(false);
         try {
             const res = await fetch(`/api/user/signout`, {
                 method: 'POST',
@@ -32,25 +37,53 @@ export default function DashSidebar() {
         } catch (error) {
             console.log(">>> check sign out error: ", error.message);
         }
-    }
+    };
+
+    const handleConfirmSignout = () => {
+        handleSignout(); // Gọi sự kiện sign out
+        setShowModal(false); // Hiển thị modal
+    };
     return (
-    <Sidebar className='w-full md:w-56'>
-        <Sidebar.Items>
-            <Sidebar.ItemGroup >
-                <Sidebar.Item active={tab === "profile"}
-                            as={Link}
-                            to='/dashboard?tab=profile'
-                            icon={HiUser} 
-                            label={"User"} 
-                            labelColor='dark'
-                >
-                        Profile
-                    </Sidebar.Item>
-                <Sidebar.Item onClick={handleSignout} className='cursor-pointer' icon={HiArrowSmRight}>
-                    Sign Out
-                </Sidebar.Item>
-            </Sidebar.ItemGroup>
-        </Sidebar.Items>
-    </Sidebar>
+        <>
+            <Sidebar className='w-full md:w-56'>
+                <Sidebar.Items>
+                    <Sidebar.ItemGroup >
+                        <Sidebar.Item active={tab === "profile"}
+                                    as={Link}
+                                    to='/dashboard?tab=profile'
+                                    icon={HiUser} 
+                                    label={"User"} 
+                                    labelColor='dark'
+                        >
+                                Profile
+                            </Sidebar.Item>
+                        <Sidebar.Item onClick={() => setShowModal(true)} className='cursor-pointer' icon={HiArrowSmRight}>
+                           Sign Out
+                        </Sidebar.Item>
+                    </Sidebar.ItemGroup>
+                </Sidebar.Items>
+            </Sidebar>
+            < Modal show={showModal} 
+                onClose={() => setShowModal(false)} 
+                popup 
+                size='md'
+            >
+                <Modal.Header />
+                <Modal.Body>
+                    <div className="text-center">
+                        <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto'/>
+                        <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Are you sure to log out?</h3>
+                    </div>
+                    <div className="flex justify-center gap-4">
+                        <Button className='bg-blue-600' onClick={() => handleConfirmSignout()}>
+                            Yes, I'm Sure
+                        </Button>
+                        <Button color='gray' onClick={() => setShowModal(false)}>No, cancel</Button>
+                    </div>
+                </Modal.Body>
+            </Modal>
+        </>
   )
 }
+
+
