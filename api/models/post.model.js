@@ -18,7 +18,7 @@ const postChema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: 'https://optinmonster.com/wp-content/uploads/2015/04/typesofblogposts.png'
+        default: 'https://bs-uploads.toptal.io/blackfish-uploads/components/blog_post_page/8969409/cover_image/optimized/unnamed-76880e314ca9bcaa0e0e19be57d2e75d.png'
     },
     category: {
         type: String,
