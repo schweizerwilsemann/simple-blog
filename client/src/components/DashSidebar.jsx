@@ -2,18 +2,20 @@ import { Sidebar, Modal, Button } from 'flowbite-react';
 import 'react-circular-progressbar/dist/styles.css';
 import {HiOutlineExclamationCircle} from 'react-icons/hi'
 import React from 'react'
-import {HiUser, HiArrowSmRight} from 'react-icons/hi'
+import {HiUser, HiArrowSmRight, HiDocumentText} from 'react-icons/hi'
 import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { signOutSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
-   
+import { useSelector } from 'react-redux';   
 
 export default function DashSidebar() {
     const location = useLocation();
     const [tab, setTab] = useState('');
     const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch();
+    const {currentUser} = useSelector(state => state.user);
+
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
         const tabFromUrl = urlParams.get('tab');
@@ -47,17 +49,30 @@ export default function DashSidebar() {
         <>
             <Sidebar className='w-full md:w-56'>
                 <Sidebar.Items>
-                    <Sidebar.ItemGroup >
+                    <Sidebar.ItemGroup className='flex flex-col gap-2'>
                         <Sidebar.Item active={tab === "profile"}
                                     as={Link}
                                     to='/dashboard?tab=profile'
                                     icon={HiUser} 
-                                    label={"User"} 
+                                    label={currentUser.isAdmin ? 'admin' : 'user'} 
                                     labelColor='dark'
                         >
                                 Profile
                             </Sidebar.Item>
-                        <Sidebar.Item onClick={() => setShowModal(true)} className='cursor-pointer' icon={HiArrowSmRight}>
+                            {currentUser.isAdmin && (
+                                    <Sidebar.Item active={tab === 'posts'}
+                                                icon={HiDocumentText}
+                                                to='/dashboard?tab=posts'
+                                                as={Link}
+                                    >
+                                        Posts
+                                    </Sidebar.Item>
+                                
+                            )}
+                        <Sidebar.Item onClick={() => setShowModal(true)} 
+                                    className='cursor-pointer' 
+                                    icon={HiArrowSmRight}
+                        >
                            Sign Out
                         </Sidebar.Item>
                     </Sidebar.ItemGroup>
