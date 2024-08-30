@@ -47,8 +47,22 @@ export default function DashUsers() {
       console.log(">>> error: ", error.message);
     }
   }
-  const handlieDeleteUser = async () => {
-
+  const handleDeleteUser = async () => {
+    try {
+        setShowModal(false);
+        const res = await fetch(`/api/user/delete/${userIdToDelete}`,{
+            method: 'DELETE',
+        });
+        const data = await res.json();
+        if(!res.ok) {
+            console.log(">>> check error: ", data.message);
+        }
+        else{
+            setUsers((prev) => prev.filter((user) =>user._id !== userIdToDelete));
+        }
+    } catch (error) {
+        console.log(">>> check delete user: ", error.message);
+    }
   }
   
   return (
@@ -106,14 +120,14 @@ export default function DashUsers() {
                 popup 
                 size='md'
         >
-            <Modal.Header  className='bg-lime-200'/>
-            <Modal.Body  className='bg-lime-200'>
+            <Modal.Header  className='bg-red-300'/>
+            <Modal.Body  className='bg-red-300'>
                 <div className="text-center">
-                    <HiOutlineExclamationCircle className='h-14 w-14 text-cyan-500 dark:text-gray-200 mb-4 mx-auto'/>
+                    <HiOutlineExclamationCircle className='h-14 w-14 text-indigo-700 dark:text-gray-200 mb-4 mx-auto'/>
                     <h3 className='mb-5 text-lg text-indigo-900 dark:text-gray-200'>Are you sure to delete this user?</h3>
                 </div>
                 <div className="flex justify-center gap-4">
-                    <Button className='bg-cyan-500' onClick={() => handleDeleteUser()}>
+                    <Button className='bg-indigo-800' onClick={() => handleDeleteUser()}>
                         Yes, I'm Sure
                     </Button>
                     <Button color='gray' onClick={() => setShowModal(false)}>No, cancel</Button>
