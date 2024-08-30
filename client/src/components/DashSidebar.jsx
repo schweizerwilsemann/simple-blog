@@ -2,7 +2,7 @@ import { Sidebar, Modal, Button } from 'flowbite-react';
 import 'react-circular-progressbar/dist/styles.css';
 import {HiOutlineExclamationCircle} from 'react-icons/hi'
 import React from 'react'
-import {HiUser, HiArrowSmRight, HiDocumentText} from 'react-icons/hi'
+import {HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup} from 'react-icons/hi'
 import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { signOutSuccess } from '../redux/user/userSlice';
@@ -60,13 +60,23 @@ export default function DashSidebar() {
                                 Profile
                             </Sidebar.Item>
                             {currentUser.isAdmin && (
-                                    <Sidebar.Item active={tab === 'posts'}
-                                                icon={HiDocumentText}
-                                                to='/dashboard?tab=posts'
-                                                as={Link}
-                                    >
-                                        Posts
-                                    </Sidebar.Item>
+                                <Sidebar.Item active={tab === 'posts'}
+                                            icon={HiDocumentText}
+                                            to='/dashboard?tab=posts'
+                                            as={Link}
+                                >
+                                    Posts
+                                </Sidebar.Item>
+                                
+                            )}
+                            {currentUser.isAdmin && (
+                                <Sidebar.Item active={tab === 'users'}
+                                            icon={HiOutlineUserGroup}
+                                            to='/dashboard?tab=users'
+                                            as={Link}
+                                >
+                                    Users
+                                </Sidebar.Item>
                                 
                             )}
                         <Sidebar.Item onClick={() => setShowModal(true)} 

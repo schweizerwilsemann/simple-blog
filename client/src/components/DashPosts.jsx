@@ -12,6 +12,7 @@ export default function DashPosts() {
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState('');
+  const [showLess, setShowLess] = useState(false);
 
   console.log(">>> check user posts: ", userPosts);
   useEffect(() => {
@@ -49,7 +50,22 @@ export default function DashPosts() {
       console.log(">>> error: ", error.message);
     }
   }
-
+  const handleShowLess = async() =>{
+    const startIndex = userPosts.length;
+    try {
+      const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`); 
+                              
+      const data = await res.json();
+      if(res.ok){
+        setUserPosts((prev) => [...prev, ...data.posts]);
+        if(data.posts.length < 9) {
+          setShowMore(false);
+        }
+      }
+    } catch (error) {
+      console.log(">>> error: ", error.message);
+    }
+  }
   const handleDeletePost = async () => {
     setShowModal(false);
     try {
@@ -88,7 +104,7 @@ export default function DashPosts() {
               <Table.HeadCell><span>Edit</span></Table.HeadCell>
             </Table.Head>
             {userPosts.map((post) => (
-              <Table.Body className='divide-y'>
+              <Table.Body className='divide-y' key={post._id}>
                 <Table.Row className='bg-white dark:border-grey-700 dark:bg-gray-800'>
                   <Table.Cell>{new Date(post.updatedAt).toLocaleDateString()}</Table.Cell>
                   <Table.Cell>
