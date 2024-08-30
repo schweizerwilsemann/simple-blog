@@ -124,7 +124,7 @@ export default function DashPosts() {
         </>
       ) : (
         <p>You have no post yet</p>
-      )};
+      )}
       < Modal show={showModal} 
                 onClose={() => setShowModal(false)} 
                 popup 
