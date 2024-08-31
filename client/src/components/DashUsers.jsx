@@ -113,7 +113,7 @@ export default function DashUsers() {
           }
         </>
       ) : (
-        <p>You have no post yet</p>
+        <p>No users to show</p>
       )}
       < Modal show={showModal} 
                 onClose={() => setShowModal(false)} 

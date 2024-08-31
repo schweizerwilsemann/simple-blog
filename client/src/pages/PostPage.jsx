@@ -2,6 +2,7 @@ import { Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import {Link, useParams} from 'react-router-dom';
 import CallToAction from '../components/CallToAction';
+import CommentSection from '../components/CommentSection';
 
 
 
@@ -17,7 +18,6 @@ export default function PostPage() {
         const fetchPost = async () => {
             try {
                 setLoading(true);
-                console.log(postSlug);
                 const res = await fetch(`/api/post/getposts?slug=${postSlug}`);
                 const data =  await res.json();
                 if(!res.ok){
@@ -29,8 +29,7 @@ export default function PostPage() {
                     setPost(data.posts[0]);
                     setLoading(false);
                     setError(false);
-                }
-                console.log(">>>data posts: ", data.posts);
+                };
             } catch (error) {
                 setError(true);
                 setLoading(false);
@@ -64,5 +63,6 @@ export default function PostPage() {
         <div className="max-w-4xl mx-auto w-full">
             <CallToAction />
         </div>
+        <div className=""> <CommentSection postId={post._id}/> </div>
     </main>
 }
