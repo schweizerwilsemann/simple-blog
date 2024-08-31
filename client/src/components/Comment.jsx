@@ -3,6 +3,7 @@ import moment from 'moment';
 import {FaThumbsUp} from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
+import { toast } from 'react-toastify';
 
 export default function Comment({comment, onLike, onEdit, onDelete}) {
     const [user, setUser] = useState({});
@@ -42,6 +43,9 @@ export default function Comment({comment, onLike, onEdit, onDelete}) {
                     content: editedContent
                 })
             });
+            if (editedContent.length < 10){
+                return toast.warning('Comment must contain at least 10 characters!');
+            }
             if (res.ok){
                 setIsEditting(false);
                 onEdit(comment, editedContent);
@@ -58,7 +62,7 @@ export default function Comment({comment, onLike, onEdit, onDelete}) {
             <img className='w-10 h-10 rounded-full bg-gray-200' src={user.profilePicture} alt={user.username} />
         </div>
         <div className="flex-1">
-            <div className="flex items-center mb-1">
+            <div className="flex items-center mb-1 p-1">
                 <span className='font-bold mr-1 text-xs truncate'>{user ? `@${user.username}`: "anonymous user"}</span>
                 <span className='text-gray-500 text-xs'>
                     {moment(comment.createdAt).fromNow()}
@@ -73,7 +77,7 @@ export default function Comment({comment, onLike, onEdit, onDelete}) {
                         />
                         <div className="flex justify-end gap-2 text-xs">
                             <Button type='button' size='sm' gradientDuoTone='purpleToPink' onClick={handleSave}>
-                                Save
+                                Save    
                             </Button>
                             
                             <Button type='button' size='sm' 

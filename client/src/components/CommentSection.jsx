@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Comment from './Comment';
 import { useNavigate } from 'react-router-dom';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { toast } from 'react-toastify';
 
 
 export default function CommentSection({postId}) {
@@ -19,7 +20,8 @@ export default function CommentSection({postId}) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if(comment.length > 200){
+        if(comment.length > 200 || comment.length <=10 ){
+            toast.warning('Comment must be between 10 and 200 characters!')
             return;
         }
         try {

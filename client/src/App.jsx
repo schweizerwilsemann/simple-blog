@@ -50,7 +50,7 @@ export default function App() {
         pauseOnFocusLoss={false}
         draggable
         pauseOnHover={true}
-        theme="light"
+        theme="dark"
       />
       <Footer />
     </BrowserRouter>
