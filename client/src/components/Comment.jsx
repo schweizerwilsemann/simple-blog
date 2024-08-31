@@ -4,7 +4,7 @@ import {FaThumbsUp} from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
 
-export default function Comment({comment, onLike, onEdit}) {
+export default function Comment({comment, onLike, onEdit, onDelete}) {
     const [user, setUser] = useState({});
     const [isEditting, setIsEditting] = useState(false);
     const [editedContent, setEditedContent] = useState(comment.content);
@@ -96,12 +96,20 @@ export default function Comment({comment, onLike, onEdit}) {
                             <p className='text-gray-400'>{comment.numberOfLikes > 0 && comment.numberOfLikes + " " + (comment.numberOfLikes === 1 ? "Like" : "Likes") }</p>
                             {
                                 currentUser && (currentUser._id === comment.userId || currentUser.isAdmin ) && (
-                                    <button type='button' 
-                                        onClick={handleEdit}
-                                        className='text-gray-400 hover:text-sky-300'
-                                    >
-                                        Edit
-                                    </button>
+                                    <>
+                                        <button type='button' 
+                                            onClick={handleEdit}
+                                            className='text-gray-400 hover:text-sky-300'
+                                        >
+                                            Edit
+                                        </button>
+                                        <button type='button' 
+                                            onClick={() => onDelete(comment._id)}
+                                            className='text-gray-400 hover:text-rose-500'
+                                        >
+                                            Delete
+                                        </button>
+                                    </>
                                 )   
                             }
                         </div>
