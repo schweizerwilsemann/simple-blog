@@ -1,8 +1,8 @@
 import { Navbar, TextInput, Button, Dropdown, Avatar, Modal } from 'flowbite-react';
 import 'react-circular-progressbar/dist/styles.css';
 import {HiOutlineExclamationCircle} from 'react-icons/hi'
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {AiOutlineSearch} from 'react-icons/ai'
 import {FaMoon, FaSun} from 'react-icons/fa'
 import {useSelector, useDispatch} from "react-redux"
@@ -11,11 +11,27 @@ import { signOutSuccess } from '../redux/user/userSlice.js'
 import { useState } from 'react';
 
 export default function Header() {
+    const location = useLocation(); 
+    const navigate = useNavigate();
     const path = useLocation().pathname;
     const {currentUser} = useSelector(state => state.user); 
     const dispatch = useDispatch();
     const {theme} = useSelector(state => state.theme);
     const [showModal, setShowModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search);
+        console.log();
+        const searchTermFromUrl = urlParams.get('searchTerm');
+        if(searchTermFromUrl){
+            setSearchTerm(searchTermFromUrl);
+        } 
+
+    }, [location.search]);
+
+
     const handleSignout = async () => {
         setShowModal(false);
         try {
@@ -37,6 +53,14 @@ export default function Header() {
         handleSignout(); // Gọi sự kiện sign out
         setShowModal(false); // Hiển thị modal
     };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set('searchTerm', searchTerm); 
+        const searchQuery = urlParams.toString();
+        navigate(`/search?${searchQuery}`);
+    }
   return (
     <>
         <Navbar className='border-b-2'>
@@ -46,11 +70,13 @@ export default function Header() {
                 via-blue-300 to bg-green-300 rounded-lg text-yellow-50'>QQ </span>
                 博客
             </Link>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <TextInput type='text' 
                     placeholder='Search...' 
                     rightIcon={AiOutlineSearch}
                     className='hidden lg:inline'
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
                 />
             </form>
             <Button className='w-12 h-10' color='gray' pill>
