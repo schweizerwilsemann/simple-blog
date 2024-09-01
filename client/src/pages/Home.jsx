@@ -20,7 +20,7 @@ export default function Home() {
         <h1 className='text-3xl font-bold lg:text-6xl'>欢迎来到我的博客 </h1>
         <p className='text-gray-500 text-xs sm:text-sm '>
           Here is the place you can learn, intertain, discuss of any problems</p>
-        <Link to='/seach' className='text-xs sm:text-sm text-teal-500 font-bold hover:underline'>View all posts</Link>
+        <Link to='/search' className='text-xs sm:text-sm text-teal-500 font-bold hover:underline'>View all posts</Link>
       </div>
       <div className="p-3 bg-amber-100 dark:bg-cyan-700">
         <CallToAction />
