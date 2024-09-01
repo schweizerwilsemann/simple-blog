@@ -2,7 +2,7 @@ import { Sidebar, Modal, Button } from 'flowbite-react';
 import 'react-circular-progressbar/dist/styles.css';
 import {HiOutlineExclamationCircle} from 'react-icons/hi'
 import React from 'react'
-import {HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup} from 'react-icons/hi'
+import {HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiAnnotation} from 'react-icons/hi'
 import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { signOutSuccess } from '../redux/user/userSlice';
@@ -76,6 +76,16 @@ export default function DashSidebar() {
                                             as={Link}
                                 >
                                     Users
+                                </Sidebar.Item>
+                                
+                            )}
+                            {currentUser.isAdmin && (
+                                <Sidebar.Item active={tab === 'comments'}
+                                            icon={HiAnnotation}
+                                            to='/dashboard?tab=comments'
+                                            as={Link}
+                                >
+                                    Comments
                                 </Sidebar.Item>
                                 
                             )}
