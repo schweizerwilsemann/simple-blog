@@ -2,9 +2,9 @@ import { Sidebar, Modal, Button } from 'flowbite-react';
 import 'react-circular-progressbar/dist/styles.css';
 import {HiOutlineExclamationCircle} from 'react-icons/hi'
 import React from 'react'
-import {HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiAnnotation} from 'react-icons/hi'
+import {HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiChartPie, HiAnnotation} from 'react-icons/hi'
 import { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { signOutSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';   
@@ -15,6 +15,19 @@ export default function DashSidebar() {
     const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch();
     const {currentUser} = useSelector(state => state.user);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const tab = searchParams.get('tab');
+        if (!searchParams.has('tab')) {
+            navigate('/dashboard?tab=dash', { replace: true });
+        }
+        if(!tab) {
+            navigate('/dashboard?tab=dash', { replace: true });
+        }
+    }, [location, navigate]);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
@@ -50,6 +63,17 @@ export default function DashSidebar() {
             <Sidebar className='w-full md:w-56'>
                 <Sidebar.Items>
                     <Sidebar.ItemGroup className='flex flex-col gap-2'>
+                        {
+                            currentUser && currentUser.isAdmin && (
+                                 <Sidebar.Item active={tab === 'dash' || !tab}
+                                            icon={HiChartPie}
+                                            to='/dashboard?tab=dash'
+                                            as={Link}
+                                >
+                                    Dashboard
+                                </Sidebar.Item>
+                            )
+                        }
                         <Sidebar.Item active={tab === "profile"}
                                     as={Link}
                                     to='/dashboard?tab=profile'
