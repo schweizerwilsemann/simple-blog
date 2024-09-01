@@ -5,10 +5,10 @@ export default function CallToAction() {
   return (
     <div className="flex flex-col sm:flex-row p-3 border border-cyan-700 dark:border-green-300 justify-center items-center rounded-tl-3xl rounded-br-3xl text-center">
         <div className='flex-1 justify-center flex flex-col '>
-            <h2 className='text-2xl '>
+            <h2 className='text-2xl dark:text-lime-300'>
                 Want to join Discord? 
             </h2>
-            <p className='text-gray-500 my-2'>
+            <p className='text-gray-500 my-2 dark:text-gray-300'>
                 Check it out for our channel!
             </p>
             <Button gradientDuoTone='tealToLime' className='rounded-tl-xl rounded-bl-none '>
